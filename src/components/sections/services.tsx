@@ -132,7 +132,7 @@ export function Services() {
           </div>
 
           <article className="soft-card overflow-hidden rounded-[2rem]">
-            <div className="relative aspect-[16/11]">
+            <div className="relative aspect-[16/9]">
               <Image
                 src={current.image.src}
                 alt={current.image.alt}

@@ -50,13 +50,13 @@ export function LogoMark({
       fill="none"
     >
       <rect
-        x="3.5"
-        y="3.5"
-        width="41"
-        height="41"
-        rx="11"
+        x="2.8"
+        y="2.8"
+        width="42.4"
+        height="42.4"
+        rx="12"
         stroke={stroke}
-        strokeWidth="2.6"
+        strokeWidth="3.4"
       />
       <path
         d="M24 12.2c6.4 7.1 9.4 12.2 9.4 16.1 0 5.1-4.1 8.9-9.4 8.9s-9.4-3.8-9.4-8.9c0-3.9 3-9 9.4-16.1Z"

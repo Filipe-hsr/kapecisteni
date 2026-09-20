@@ -18,10 +18,10 @@ export function Paving() {
     <section className="spray-field overflow-hidden">
       <div className="spray-band top-10 opacity-80" />
       <div className="relative z-10 mx-auto max-w-[86rem] px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-        <h2 className="display-title text-[clamp(2.6rem,8vw,7rem)] text-navy/12">
+        <h2 className="display-title text-[clamp(2.4rem,7vw,6.2rem)] text-navy/35">
           Dlažba zase jako nová
         </h2>
-        <p className="mt-2 max-w-xl text-mist">
+        <p className="mt-3 max-w-xl text-mist">
           Tři záběry ze zakázky. Fotky sem doplníme, jakmile budou ve stejném
           formátu jako zbytek galerie.
         </p>

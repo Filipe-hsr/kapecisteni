@@ -177,7 +177,7 @@ function HeatCard() {
           />
         </div>
       </div>
-      <div className="relative flex min-h-[22rem] flex-col justify-end bg-[linear-gradient(180deg,#fff6f1_0%,#ffe8df_100%)] p-6 sm:p-10">
+      <div className="relative flex min-h-[22rem] flex-col justify-center bg-[linear-gradient(180deg,#fff6f1_0%,#ffe8df_100%)] p-6 sm:p-10">
         <p className="display-title text-[clamp(3.8rem,10vw,7.2rem)] text-heat">
           250 bar
         </p>

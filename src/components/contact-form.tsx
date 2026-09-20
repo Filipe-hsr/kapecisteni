@@ -81,7 +81,7 @@ export function ContactForm() {
           name="name"
           required
           autoComplete="name"
-          className="h-12 rounded-2xl border-0 bg-white px-4 text-base shadow-none"
+          className="h-12 rounded-2xl border-0 bg-white px-4 text-base shadow-none ring-1 ring-black/5"
         />
       </Field>
 
@@ -92,7 +92,7 @@ export function ContactForm() {
           type="email"
           required
           autoComplete="email"
-          className="h-12 rounded-2xl border-0 bg-white px-4 text-base shadow-none"
+          className="h-12 rounded-2xl border-0 bg-white px-4 text-base shadow-none ring-1 ring-black/5"
         />
       </Field>
 
@@ -102,7 +102,7 @@ export function ContactForm() {
           name="need"
           required
           rows={5}
-          className="min-h-36 rounded-2xl border-0 bg-white px-4 py-3 text-base shadow-none"
+          className="min-h-36 rounded-2xl border-0 bg-white px-4 py-3 text-base shadow-none ring-1 ring-black/5"
         />
       </Field>
 

@@ -11,7 +11,7 @@ export function Contact() {
         </h2>
 
         <div className="mt-12 grid items-start gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="soft-card rounded-[2rem] p-6 sm:p-8">
+          <div className="rounded-[2rem] bg-[#e8eef8] p-6 sm:p-8">
             <p className="max-w-lg text-mist">
               Napište nám, co potřebujete umýt. Připravíme nezávaznou cenovou
               kalkulaci.
