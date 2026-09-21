@@ -4,7 +4,8 @@ import { HOME_HTML } from "@/content/home-markup";
 export default function Home() {
   return (
     <>
-      <div dangerouslySetInnerHTML={{ __html: HOME_HTML }} />
+      <canvas id="scene" aria-hidden="true" />
+      <div suppressHydrationWarning dangerouslySetInnerHTML={{ __html: HOME_HTML }} />
       <KapeRuntime />
     </>
   );

@@ -83,7 +83,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <JsonLd />
         {children}
-        <Script src="/kape-runtime.js" strategy="beforeInteractive" />
+        <Script src="/kape-runtime.js" strategy="afterInteractive" />
       </body>
     </html>
   );
