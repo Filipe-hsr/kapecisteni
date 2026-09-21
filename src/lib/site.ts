@@ -2,8 +2,9 @@ export const site = {
   name: "KAPE čištění s.r.o.",
   shortName: "KAPE",
   tagline: "Nic není tak vysoké, abychom tam nedosáhli.",
+  title: "KAPE čištění | Výškové mytí oken, fasád a opláštění hal ze země",
   description:
-    "Výškové mytí oken, fasád a opláštění hal ze země. PuraQleen do 18 m, SpaceVac do 15 m, horkovodní tlak Kränzle + Oertzen. Teplice, Praha a kamkoli za zakázkou.",
+    "Myjeme okna, fasády a opláštění průmyslových budov ze země, do 18 m bez vysokozdvižné techniky. PuraQleen, SpaceVac a horkovodní vysokotlak Kränzle + Oertzen.",
   url: "https://www.kapecisteni.cz",
   email: "info@kapecisteni.cz",
   ico: "06930077",
@@ -22,10 +23,10 @@ export const site = {
   social: {
     facebook: "https://www.facebook.com/kapecisteni/",
     instagram: "https://www.instagram.com/kape_cisteni/",
-    youtube: "https://www.youtube.com/results?search_query=KAPE+%C4%8Di%C5%A1t%C4%9Bn%C3%AD",
+    youtube: "https://www.youtube.com/channel/UCr339rxe3vyLsTf5jvct3AA",
   },
   googleReviews:
-    "https://www.google.com/maps/search/?api=1&query=KAPE+%C4%8Di%C5%A1t%C4%9Bn%C3%AD+s.r.o.+Teplice",
+    "https://www.google.com/maps/search/?api=1&query=KAPE%20%C4%8Di%C5%A1t%C4%9Bn%C3%AD%20s.r.o.%20Teplice&query_place_id=ChIJkYOdw2mPCUcRDGE-bnGdJAs",
   people: [
     {
       name: "Kamil Jůzl",
@@ -54,8 +55,8 @@ export const site = {
 
 export const nav = [
   { href: "#technologie", label: "Technologie" },
-  { href: "#kdo-jsme", label: "Kdo jsme" },
-  { href: "#co-cistime", label: "Co čistíme" },
+  { href: "#tym", label: "Kdo jsme" },
+  { href: "#sluzby", label: "Co čistíme" },
   { href: "#reference", label: "Reference" },
   { href: "#recenze", label: "Recenze" },
 ] as const;

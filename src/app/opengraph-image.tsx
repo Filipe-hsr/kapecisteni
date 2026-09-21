@@ -14,8 +14,8 @@ export default function OpenGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "linear-gradient(135deg, #0B1220 0%, #12203a 55%, #0066FF 140%)",
-          color: "white",
+          background: "linear-gradient(135deg, #0A1230 0%, #1437F5 140%)",
+          color: "#F2F5FF",
           padding: 72,
         }}
       >
@@ -24,37 +24,39 @@ export default function OpenGraphImage() {
             style={{
               width: 64,
               height: 64,
-              borderRadius: 16,
-              border: "3px solid #00A8FF",
+              borderRadius: 12,
+              background: "#1B1B4C",
+              border: "3px solid #00BFF3",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: 36,
+              fontSize: 28,
+              color: "#00BFF3",
             }}
           >
             ●
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 36, fontWeight: 800, color: "#00A8FF" }}>KAPE</div>
-            <div style={{ fontSize: 18, color: "rgba(255,255,255,0.6)" }}>čištění s.r.o.</div>
+            <div style={{ fontSize: 36, fontWeight: 800, color: "#00BFF3" }}>KAPE</div>
+            <div style={{ fontSize: 18, color: "rgba(242,245,255,0.62)" }}>čištění s.r.o.</div>
           </div>
         </div>
         <div
           style={{
-            fontSize: 64,
+            fontSize: 62,
             fontWeight: 800,
-            lineHeight: 1.05,
+            lineHeight: 1.02,
             letterSpacing: "-0.04em",
-            maxWidth: 900,
+            maxWidth: 920,
           }}
         >
           Nic není tak vysoké, abychom tam nedosáhli.
         </div>
-        <div style={{ fontSize: 24, color: "rgba(255,255,255,0.7)" }}>
-          Teplice · PuraQleen 18 m · SpaceVac 15 m
+        <div style={{ fontSize: 22, color: "rgba(242,245,255,0.72)" }}>
+          Teplice · PuraQleen 18 m · SpaceVac 15 m · Kränzle + Oertzen
         </div>
       </div>
     ),
-    { ...size }
+    { ...size },
   );
 }

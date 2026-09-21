@@ -1,20 +1,35 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Archivo, Fredoka, Quicksand } from "next/font/google";
+import Script from "next/script";
 import { JsonLd } from "@/components/json-ld";
 import { site } from "@/lib/site";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
+const archivo = Archivo({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700", "800"],
+  axes: ["wdth"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const fredoka = Fredoka({
+  subsets: ["latin", "latin-ext"],
+  weight: "700",
+  variable: "--font-fredoka",
+  display: "swap",
+});
+
+const quicksand = Quicksand({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500"],
+  variable: "--font-quicksand",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Výškové mytí oken bez plošiny | KAPE čištění",
+    default: site.title,
     template: "%s | KAPE čištění",
   },
   description: site.description,
@@ -23,6 +38,8 @@ export const metadata: Metadata = {
     "mytí fasád",
     "PuraQleen",
     "SpaceVac",
+    "Kränzle",
+    "Oertzen",
     "Teplice",
     "KAPE čištění",
     "čištění hal",
@@ -37,12 +54,12 @@ export const metadata: Metadata = {
     locale: "cs_CZ",
     url: site.url,
     siteName: site.name,
-    title: "Nic není tak vysoké, abychom tam nedosáhli. | KAPE čištění",
+    title: site.title,
     description: site.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: "KAPE čištění s.r.o.",
+    title: site.name,
     description: site.description,
   },
   robots: {
@@ -53,16 +70,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="cs" className={`${plusJakarta.variable} h-full`}>
-      <body className="min-h-full flex flex-col font-sans">
+    <html
+      lang="cs"
+      className={`${archivo.variable} ${fredoka.variable} ${quicksand.variable}`}
+    >
+      <body>
         <JsonLd />
-        <a
-          href="#obsah"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-white focus:px-4 focus:py-2"
-        >
-          Přeskočit na obsah
-        </a>
         {children}
+        <Script src="/kape-runtime.js" strategy="beforeInteractive" />
       </body>
     </html>
   );

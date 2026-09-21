@@ -2,15 +2,17 @@
 
 Jednostránkový marketingový web pro **KAPE čištění s.r.o.** (Teplice) — výškové mytí oken, fasád a interiérů ze země.
 
-- Stack: Next.js (App Router), TypeScript, Tailwind CSS, shadcn/ui
-- Jazyk: čeština
-- Produkční doména: [https://www.kapecisteni.cz/](https://www.kapecisteni.cz/)
+Vizuál a copy jsou port SOURCE-web.html (Claude artifact): Archivo / Fredoka / Quicksand, `--bg #F1F4F9`, `--ink #0A1230`, `--blue #1437F5`, `--hot #D9431A`, WebGL spray, multi-step kalkulace.
+
+- Stack: Next.js (App Router), TypeScript, původní CSS z artifaktu
+- Jazyk: `lang=cs`
+- Produkční doména (později, DNS zatím neměnit): [https://www.kapecisteni.cz/](https://www.kapecisteni.cz/)
 
 ## Spuštění lokálně
 
 ```bash
 npm install
-cp .env.example .env.local   # doplňte klíč, až ho budete mít
+cp .env.example .env.local
 npm run dev
 ```
 
@@ -23,7 +25,7 @@ npm start
 
 ## Formulář a env
 
-Poptávkový formulář posílá data na `/api/contact`. Route ho doručí přes [Web3Forms](https://web3forms.com) na **info@kapecisteni.cz**.
+Multi-step kalkulace na `#kontakt` posílá JSON na `/api/contact`. Route ho doručí přes [Web3Forms](https://web3forms.com) na **info@kapecisteni.cz**.
 
 1. Na Web3Forms založte access key a jako příjemce nastavte `info@kapecisteni.cz`.
 2. Do `.env.local` (lokálně) nebo do Environment Variables na Vercelu vložte:
@@ -34,30 +36,33 @@ WEB3FORMS_ACCESS_KEY=váš_klíč
 
 Bez klíče:
 
-- ve vývoji (`next dev`) formulář uspěje v testovacím režimu a nic neodešle
-- v produkci vrátí chybu a vyzve k telefonu / e-mailu
+- ve vývoji (`next dev`) formulář uspěje v testovacím režimu, payload se zaloguje do konzole a nic se neodešle
+- v produkci API vrátí chybu a prohlížeč otevře záložní `mailto:info@kapecisteni.cz` s předvyplněnou kalkulací
+
+Volitelně stejný klíč jako `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` (nevyžadujeme).
 
 ## SEO
 
-- metadata a Open Graph v `src/app/layout.tsx` + `opengraph-image.tsx`
+- title/description z artifaktu, Open Graph v `src/app/layout.tsx` + `opengraph-image.tsx`
 - `sitemap.xml` a `robots.txt` (App Router)
-- LocalBusiness JSON-LD: IČO 06930077, Skupova 569/19, 415 01 Teplice-Trnovany
-
-## Nasazení na Vercel a doména kapecisteni.cz
-
-1. Importujte repo do Vercelu (MJWS / Filipe účet).
-2. Nastavte `WEB3FORMS_ACCESS_KEY`.
-3. Deploy — nejdřív preview URL, DNS zatím neměňte.
-4. Až bude preview v pořádku, ve Vercelu přidejte custom domains:
-   - `www.kapecisteni.cz`
-   - `kapecisteni.cz`
-5. U registrátora DNS:
-   - `www` → CNAME na hodnotu, kterou ukáže Vercel (obvykle `cname.vercel-dns.com`)
-   - apex `@` → A `76.76.21.21` (nebo ALIAS/ANAME, pokud to registrátor umí)
-6. SSL vystaví Vercel automaticky.
-7. Starý hosting nechte do vypršení TTL, pak ho vypněte.
-8. Pokud se liší staré cesty (`#uvod`, `#o-nas`…), Vercel zvládne 301 v `vercel.json`.
+- LocalBusiness JSON-LD: IČO 06930077, Skupova 569/19, 415 01 Teplice-Trnovany, hodnocení 4,9 / 13 recenzí
 
 ## Fotky
 
-Akční fotky z aktuálního webu jsou v `public/photos/`. Sekce **Dlažba zase jako nová** má připravenou mřížku Před / Při práci / Po — stačí doplnit tři JPEG a napojit je v `src/components/sections/paving.tsx`.
+JPEG z artifaktu jsou v `public/images/` (`sky`, `roka`, `merc`, `cladding`, `showroom`, `office`, `flats`, `green`, `vac`, `facade`, `pave_*`). Portréty týmu v `public/images/team/`.
+
+## Nasazení na Vercel
+
+1. Importujte repo do Vercelu (MJWS / Filipe účet).
+2. Nastavte `WEB3FORMS_ACCESS_KEY`.
+3. Deploy — nejdřív preview URL. **DNS kapecisteni.cz zatím neměňte.**
+4. Až bude preview v pořádku, ve Vercelu přidejte custom domains `www.kapecisteni.cz` a `kapecisteni.cz`.
+5. U registrátora teprve potom CNAME/A podle hodnot z Vercelu.
+6. SSL vystaví Vercel automaticky.
+
+## Kontakty
+
+- info@kapecisteni.cz
+- Petr Jileček +420 732 686 010
+- Kamil Jůzl +420 777 150 909
+- Martina Pokorná +420 727 868 585
