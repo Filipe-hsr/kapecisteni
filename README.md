@@ -2,7 +2,7 @@
 
 Jednostránkový marketingový web pro **KAPE čištění s.r.o.** (Teplice) — výškové mytí oken, fasád a interiérů ze země.
 
-Vizuál a copy jsou port SOURCE-web.html (Claude artifact): Archivo / Fredoka / Quicksand, `--bg #F1F4F9`, `--ink #0A1230`, `--blue #1437F5`, `--hot #D9431A`, WebGL spray, multi-step kalkulace.
+Vizuál je tmavý Claude artifact (navy + particle spray na všech slidech): Archivo / Fredoka / Quicksand, `--bg #050918`, `--ink #F2F5FF`, `--cta #2A4BFF`, `--hot #FF8A5C`, WebGL spray, multi-step kalkulace. Copy a struktura zůstávají z SOURCE-web.html.
 
 - Stack: Next.js (App Router), TypeScript, původní CSS z artifaktu
 - Jazyk: `lang=cs`
