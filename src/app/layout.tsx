@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Archivo, Fredoka, Quicksand } from "next/font/google";
 import Script from "next/script";
 import { JsonLd } from "@/components/json-ld";
@@ -68,10 +68,16 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#050918",
+  colorScheme: "dark",
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="cs"
+      data-theme="dark"
       className={`${archivo.variable} ${fredoka.variable} ${quicksand.variable}`}
     >
       <body>
