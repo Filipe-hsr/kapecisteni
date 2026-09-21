@@ -13,21 +13,21 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0B1220",
-          borderRadius: 16,
+          background: "#1B1B4C",
+          borderRadius: 12,
+          border: "4px solid #00BFF3",
         }}
       >
         <div
           style={{
-            width: 28,
-            height: 36,
-            background: "#00A8FF",
-            borderRadius: "50% 50% 50% 50%",
-            transform: "rotate(0deg)",
+            width: 22,
+            height: 30,
+            background: "#00BFF3",
+            borderRadius: "50% 50% 46% 46%",
           }}
         />
       </div>
     ),
-    { ...size }
+    { ...size },
   );
 }

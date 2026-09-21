@@ -8,7 +8,7 @@ export function JsonLd() {
     name: site.name,
     legalName: site.name,
     url: site.url,
-    image: `${site.url}/og.png`,
+    image: `${site.url}/opengraph-image`,
     email: site.email,
     telephone: site.primaryPhone.display,
     foundingDate: String(site.foundingYear),
@@ -28,8 +28,20 @@ export function JsonLd() {
       longitude: site.geo.longitude,
     },
     areaServed: ["Teplice", "Ústecký kraj", "Praha", "Česko"],
-    sameAs: [site.social.facebook],
+    sameAs: [site.social.facebook, site.social.instagram, site.social.youtube],
     description: site.description,
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      reviewCount: "13",
+      bestRating: "5",
+    },
+    employee: site.people.map((person) => ({
+      "@type": "Person",
+      name: person.name,
+      jobTitle: person.role,
+      telephone: person.phone,
+    })),
   };
 
   return (
