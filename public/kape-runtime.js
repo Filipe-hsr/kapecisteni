@@ -19,14 +19,19 @@ const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * 
 let VH = innerHeight, VW = innerWidth;
 
 /* ---------- theme ---------- */
-const theme = {};
-const hex = v => { v = v.trim().replace('#', ''); return [0, 2, 4].map(i => parseInt(v.slice(i, i + 2), 16) / 255); };
-function readTheme() { const cs = getComputedStyle(document.documentElement);
-  ['bg', 'p0', 'p1', 'p2', 'p3', 'p4', 'steam'].forEach(k => theme[k] = hex(cs.getPropertyValue('--' + k)));
-  theme.dark = parseFloat(cs.getPropertyValue('--dark')) || 0; }
+/* Hardcoded electric blue: CSS hex + additive stacking was clipping B first and blooming lime/yellow. */
+const BLUE = [0.0784313725490196, 0.21568627450980393, 0.9607843137254902]; // #1437F5
+const GLOW = [0.165, 0.48, 1];
+const FUNNEL = [0.30, 0.52, 1];
+const ORANGE = [1, 0.41568627450980394, 0.2]; // #FF6A33
+const WHITE = [1, 1, 1];
+const NAVY = [0.0196078431372549, 0.03529411764705882, 0.09411764705882353]; // #050918
+const theme = { bg: NAVY, p0: BLUE, p1: GLOW, p2: FUNNEL, p3: ORANGE, p4: BLUE, steam: WHITE, dark: 1 };
+function readTheme() {
+  theme.bg = NAVY; theme.p0 = BLUE; theme.p1 = GLOW; theme.p2 = FUNNEL;
+  theme.p3 = ORANGE; theme.p4 = BLUE; theme.steam = WHITE; theme.dark = 1;
+}
 readTheme();
-new MutationObserver(readTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readTheme);
 
 /* ---------- text split + reveals ---------- */
 $$('[data-split]').forEach(el => { let i = 0;
@@ -112,9 +117,12 @@ mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}
 float w(float s,float i){float x=clamp(1.-abs(s-i),0.,1.);return x*x*(3.-2.*x);}
 void main(){
  float T=uT;
- vec3 p0=aT;p0.xz=rot(T*.14+uM.x*.7)*p0.xz;
- float fr=mix(-1.6,1.6,fract(T*.085));
- float b0=mix(.3,1.,smoothstep(fr+.05,fr-.3,aT.y))+1.2*smoothstep(.1,0.,abs(aT.y-fr));
+ vec3 p0=aT;
+ p0.xz=rot(T*.09+aT.y*.18+uM.x*.45)*p0.xz;
+ p0.x+=.07*sin(T*1.25+aT.y*5.2+aR.x*8.);
+ p0.z+=.06*cos(T*.95+aT.y*4.1);
+ p0.y+=.05*sin(T*.8+aT.x*3.4);
+ float b0=1.;
  vec3 p1=aD;p1.x*=1.+.06*sin(T*1.6+aD.y*3.);p1.z*=1.+.06*cos(T*1.2+aD.y*3.);p1.xz=rot(T*.3+uM.x*.7)*p1.xz;p1.y+=.07*sin(T*.9);
  float tv=1.-fract(aR.y+T*.06);float arm=floor(aR.x*6.)/6.;float jit=(fract(aR.x*6.)-.5);float av=(arm+jit*jit*jit*.9)*6.2832+tv*8.+T*.7;float rv=.05+pow(tv,1.9)*1.3*(.7+.3*aR.z);
  vec3 p2=vec3(cos(av)*rv,-1.3+tv*2.6,sin(av)*rv);
@@ -140,9 +148,12 @@ void main(){
  vec3 jet=mix(c3,cSt,smoothstep(.15,.85,tj)+stm*.3);
  vec3 col=(c0*w0+c1*w1+c2*w2+jet*w3+c4*w4)/ws;
  float br=mix(1.,b0,w0/ws);
- col=mix(col,mix(col,vec3(1.),.6*uDark+.0),clamp(br-1.,0.,1.));
+ col=mix(col,mix(col,vec3(.55,.72,1.),.35*uDark),clamp(br-1.,0.,1.));
+ vec3 hue=col;float mx=max(hue.r,hue.g);
+ hue.b=max(hue.b,mx*1.45+.28);hue.r=min(hue.r,hue.b*.40);hue.g=min(hue.g,hue.b*.55);
+ col=mix(hue,col,clamp(w3/ws,0.,1.));
  float al=(.35+.65*aR.z)*min(br,1.)*uA*k*(1.-tr*1.3)*mix(1.,1.-tj*.75,w3/ws)*mix(1.,mix(.6,.4,fld),w4/ws);
- float dm=(w0+w1*mix(.75,.34,uDark)+w2*mix(.8,.36,uDark)+w3*mix(.8,.36,uDark)+w4*.8)/ws;vC=vec4(col,al*dm*mix(.85,.62,uDark));
+ float dm=(w0*.42+w1*mix(.75,.38,uDark)+w2*mix(.8,.40,uDark)+w3*mix(.8,.36,uDark)+w4*.5)/ws;vC=vec4(col,al*dm*mix(.85,.55,uDark));
 }`;
 const FS = `precision mediump float;varying vec4 vC;void main(){float d=length(gl_PointCoord-.5);float a=smoothstep(.5,.08,d);gl_FragColor=vec4(vC.rgb,vC.a*a);}`;
 
@@ -176,15 +187,16 @@ function initGL() {
   bufB = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, bufB); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
   'R T D Y B C1 C2'.split(' ').forEach(n => U['b' + n] = gl.getUniformLocation(prB, n));
   gl.useProgram(pr);
-  // geometry: tower + drop positions, random seeds
+  // geometry: spray plume + drop positions, random seeds (no building/grid tower)
   const S = 10, buf = new Float32Array(N * S), R = Math.random;
   for (let i = 0; i < N; i++) { const o = i * S;
-    const W = .95, H = 2.75, FL = 12, CO = 4, r = R(); let u, v, glass = 0;
-    if (r < .4) { v = Math.round(R() * FL) / FL; u = R() - .5; } else if (r < .7) { u = Math.round(R() * CO) / CO - .5; v = R(); } else { u = R() - .5; v = R(); glass = 1; }
-    const f = (R() * 4) | 0, x = f === 0 ? u * W : f === 1 ? W / 2 : f === 2 ? u * W : -W / 2, z = f === 0 ? W / 2 : f === 1 ? u * W : f === 2 ? -W / 2 : u * W;
-    buf[o] = x; buf[o + 1] = (v - .5) * H; buf[o + 2] = z;
-    const th = Math.acos(1 - 2 * Math.pow(R(), .85)), ph = R() * 6.2832; let rr = Math.sin(th) * Math.pow(Math.sin(th / 2), 1.5) * 1.12; if (R() < .1) rr *= Math.sqrt(R());
-    buf[o + 3] = Math.cos(ph) * rr; buf[o + 4] = Math.cos(th) * 1.25 + .2; buf[o + 5] = Math.sin(ph) * rr;
+    const th = R() * 6.2832, h = Math.pow(R(), .62) * 2.55 - 1.15;
+    const flare = .22 + Math.pow(Math.max(0, h + .55), 1.2) * 1.05;
+    const spr = Math.sqrt(Math.pow(R(), .42)) * flare * (.5 + R() * .75);
+    buf[o] = Math.cos(th) * spr; buf[o + 1] = h; buf[o + 2] = Math.sin(th) * spr * .68;
+    const glass = R() < .12 ? 1 : 0;
+    const thD = Math.acos(1 - 2 * Math.pow(R(), .85)), ph = R() * 6.2832; let rr = Math.sin(thD) * Math.pow(Math.sin(thD / 2), 1.5) * 1.12; if (R() < .1) rr *= Math.sqrt(R());
+    buf[o + 3] = Math.cos(ph) * rr; buf[o + 4] = Math.cos(thD) * 1.25 + .2; buf[o + 5] = Math.sin(ph) * rr;
     buf[o + 6] = R(); buf[o + 7] = R(); buf[o + 8] = glass ? R() * .4 : .35 + R() * .65; buf[o + 9] = R(); }
   bufP = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, bufP); gl.bufferData(gl.ARRAY_BUFFER, buf, gl.STATIC_DRAW);
   'uS uT uIn uAsp uDpr uSc uA uDark uOff uM c0 c1 c2 c3 c4 cSt'.split(' ').forEach(n => U[n] = gl.getUniformLocation(pr, n));
@@ -201,7 +213,7 @@ const anchors = [
   ...$$('.chap').map(el => ({ el, s: +el.dataset.shape })),
   { el: $('#proc'), s: 4 }
 ];
-const OFF = { d: [[1.45, 0], [-1.45, .4], [1.45, .42], [-1.3, .5], [0, 0]], m: [[.5, 1.25], [0, .95], [0, .95], [0, .9], [0, -.2]] };
+const OFF = { d: [[.22, .06], [-1.45, .4], [1.45, .42], [-1.3, .5], [0, 0]], m: [[0, .1], [0, .95], [0, .95], [0, .9], [0, -.2]] };
 let shape = 0, shapeT = 0, offX = 1.45, offY = 0, alpha = 1, sc = 1;
 const tech = $('.tech'), contact = $('.contact'), rail = $('.rail'), railLinks = $$('.rail a');
 function sceneTargets() {

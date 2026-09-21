@@ -5,7 +5,7 @@
   --bg:#050918; --bg-2:#0A1230; --card:#101938;
   --ink:#F2F5FF; --soft:#9AA6CC; --line:rgba(238,242,255,.14);
   --blue:#5C7DFF; --on-blue:#FFFFFF; --hot:#FF8A5C; --cta:#2A4BFF;
-  --p0:#2F5CFF; --p1:#0B4BFF; --p2:#3D6CFF; --p3:#FF7A3D; --p4:#2F5CFF; --steam:#FFFFFF; --dark:1;
+  --p0:#1437F5; --p1:#2A7BFF; --p2:#4D8CFF; --p3:#FF6A33; --p4:#1437F5; --steam:#FFFFFF; --dark:1;
   --ff:var(--font-archivo),"Archivo","Helvetica Neue",Arial,sans-serif;
   --gut:clamp(1.25rem,4vw,4.5rem);
   --ease:cubic-bezier(.16,.84,.24,1);
