@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, Fredoka, Quicksand } from "next/font/google";
+import Script from "next/script";
 import { JsonLd } from "@/components/json-ld";
 import { site } from "@/lib/site";
 import "./globals.css";
@@ -76,6 +77,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <JsonLd />
         {children}
+        <Script src="/kape-runtime.js" strategy="beforeInteractive" />
       </body>
     </html>
   );

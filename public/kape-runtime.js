@@ -1,32 +1,11 @@
-// @ts-nocheck
-/* Port of SOURCE-web.html runtime — keep visual behavior identical. */
-let setupDone = false;
-let running = false;
-let rafId = 0;
-let frameFn = function () {};
-
-export function initKape() {
-  if (typeof window === 'undefined') return () => {};
-  if (!setupDone) {
-    setupDone = true;
-    setup();
-  }
-  if (!running) {
-    running = true;
-    rafId = requestAnimationFrame(frameFn);
-  }
-  return () => {
-    running = false;
-    cancelAnimationFrame(rafId);
-  };
-}
-
-function setup() {
+(() => {
+'use strict';
+if (window.__KAPE_INIT) return;
+window.__KAPE_INIT = true;
 
 const IMAGE_KEYS = ['cladding','facade','flats','green','merc','office','pave_after','pave_before','pave_mid','pave_tool','roka','showroom','sky','vac'];
 const IMAGES = Object.fromEntries(IMAGE_KEYS.map(k => [k, '/images/' + k + '.jpg']));
 
-'use strict';
 /* Recenze z Googlu: sem doplňte další skutečné recenze (text + jméno autora). */
 const REVIEWS = [
   { text: 'Se službami jsme byli velice spokojeni. Velmi milý, osobní přístup.', who: 'recenze na Googlu' }
@@ -61,15 +40,15 @@ $$('img[data-src]').forEach(img => { img.addEventListener('error', () => img.rem
 
 /* ---------- nav ---------- */
 const nav = $('#nav'), burger = $('.burger');
-const closeNav = () => { nav.classList.remove('is-open'); document.body.style.overflow = ''; burger.setAttribute('aria-expanded', false); burger.setAttribute('aria-label', 'Otevřít menu'); };
-burger.addEventListener('click', () => { if (nav.classList.contains('is-open')) return closeNav();
+const closeNav = () => { nav?.classList.remove('is-open'); document.body.style.overflow = ''; burger?.setAttribute('aria-expanded', false); burger?.setAttribute('aria-label', 'Otevřít menu'); };
+if (burger) burger.addEventListener('click', () => { if (nav.classList.contains('is-open')) return closeNav();
   nav.classList.add('is-open'); document.body.style.overflow = 'hidden'; burger.setAttribute('aria-expanded', true); burger.setAttribute('aria-label', 'Zavřít menu'); });
 $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => { const t = $(a.getAttribute('href')); if (!t) return; e.preventDefault(); closeNav();
   const y = t.classList.contains('chap') && !MOB.matches ? t.getBoundingClientRect().top + scrollY + Math.max(0, (t.offsetHeight - innerHeight) / 2) : t.getBoundingClientRect().top + scrollY;
   scrollTo({ top: y, behavior: RM ? 'auto' : 'smooth' }); }));
 
 /* ---------- cities marquee ---------- */
-{ const c = ['Praha', 'Děčín', 'Rumburk', 'Liberec', 'Mělník', 'Roudnice', 'Litoměřice', 'Kladno', 'Karlovy Vary'].map(n => `<span>${n}</span>`).join(''); $('.cities__t').innerHTML = c + c; }
+{ const c = ['Praha', 'Děčín', 'Rumburk', 'Liberec', 'Mělník', 'Roudnice', 'Litoměřice', 'Kladno', 'Karlovy Vary'].map(n => `<span>${n}</span>`).join(''); const citiesT = $('.cities__t'); if (citiesT) citiesT.innerHTML = c + c; }
 
 /* ---------- services panel ---------- */
 const PANEL = [
@@ -82,7 +61,7 @@ const PANEL = [
   { t: 'PuraQleen', n: 'Solární panely', b: ['demineralizovaná voda', 'bez vodního kamene', 'bez zbytků čisticích prostředků'], i: '<path d="M34 24h92l20 56H14z" pathLength="1"/><path d="M27.5 42h105M21 61h118M65 24 56 80M95 24l9 56" pathLength="1"/><path d="M80 80v12M62 92h36" pathLength="1"/>' }
 ];
 const panel = $('#panel');
-function setPanel(i) { const d = PANEL[i]; if (!d) return; panel.style.setProperty('--pc', d.hot ? 'var(--hot)' : 'var(--blue)');
+function setPanel(i) { const d = PANEL[i]; if (!d || !panel) return; panel.style.setProperty('--pc', d.hot ? 'var(--hot)' : 'var(--blue)');
   const ic = `<svg viewBox="0 0 160 100">${d.i}</svg>`;
   panel.innerHTML = `${d.p ? `<div class="panel__ph"><img src="${IMAGES[d.p]}" alt="">${ic}</div>` : ic}<p class="panel__tech">${d.t}</p><p class="panel__name">${d.n}</p><ul>${d.b.map(x => `<li>${x}</li>`).join('')}</ul>`; }
 setPanel(0);
@@ -108,15 +87,17 @@ if (matchMedia('(hover:hover)').matches && !RM) rcards.forEach(c => {
 addEventListener('pointermove', e => { ptx = e.clientX; pty = e.clientY; mouse[0] = e.clientX / VW - .5; mouse[1] = e.clientY / VH - .5; }, { passive: true });
 
 /* ---------- reviews ---------- */
-$('.stars').innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>'.repeat(5);
+if ($('.stars')) $('.stars').innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>'.repeat(5);
 const stage = $('#revStage'), dots = $('#revDots'); let revI = 0, revTimer;
-REVIEWS.forEach((r, i) => { const f = document.createElement('figure'); f.className = 'rev__q' + (i ? '' : ' on');
+if (stage) stage.innerHTML = '';
+if (dots) dots.innerHTML = '';
+REVIEWS.forEach((r, i) => { if (!stage) return; const f = document.createElement('figure'); f.className = 'rev__q' + (i ? '' : ' on');
   const q = document.createElement('blockquote'); q.textContent = '„' + r.text + '“'; const c = document.createElement('figcaption'); c.textContent = r.who; f.append(q, c); stage.append(f);
   if (REVIEWS.length > 1) { const b = document.createElement('button'); b.setAttribute('aria-label', 'Recenze ' + (i + 1)); if (!i) b.className = 'on'; b.addEventListener('click', () => showRev(i, true)); dots.append(b); } });
 function showRev(i, user) { revI = i; $$('.rev__q', stage).forEach((f, k) => f.classList.toggle('on', k === i)); $$('button', dots).forEach((b, k) => b.classList.toggle('on', k === i)); if (user) clearInterval(revTimer); }
 if (REVIEWS.length > 1 && !RM) revTimer = setInterval(() => showRev((revI + 1) % REVIEWS.length), 6500);
 const score = $('#score'); let scoreDone = false;
-new IntersectionObserver(es => { if (!es[0].isIntersecting || scoreDone || RM) return; scoreDone = true; const t0 = performance.now();
+if (score) new IntersectionObserver(es => { if (!es[0].isIntersecting || scoreDone || RM) return; scoreDone = true; const t0 = performance.now();
   (function tick(n) { const p = clamp((n - t0) / 1600), v = (1 - Math.pow(1 - p, 4)) * 4.9; score.textContent = v.toFixed(1).replace('.', ','); if (p < 1) requestAnimationFrame(tick); })(t0); }, { threshold: .4 }).observe(score);
 
 /* ================= WebGL particle scene ================= */
@@ -210,7 +191,7 @@ function initGL() {
   gl.disable(gl.DEPTH_TEST); gl.enable(gl.BLEND); return true;
 }
 function sizeGL() { const d = Math.min(devicePixelRatio || 1, MOB.matches ? 1.25 : 1.6); cv.width = Math.round(VW * d); cv.height = Math.round(VH * d); gl.viewport(0, 0, cv.width, cv.height); cv._d = d; }
-glOK = initGL(); if (glOK) sizeGL(); else cv.style.display = 'none';
+glOK = cv ? initGL() : false; if (glOK) sizeGL(); else if (cv) cv.style.display = 'none';
 
 /* scroll → shape: anchors are section centres; shapes hold while a chapter is being read */
 const anchors = [{ el: $('.hero'), s: 0 }, ...$$('.chap').map(el => ({ el, s: +el.dataset.shape })), { el: $('#proc'), s: 4 }];
@@ -237,11 +218,11 @@ const eqLine = $('.eq__line'), eqParts = $$('.eq__line i, .eq__line em').map(el 
 function measureEq() { eqParts.forEach(o => { o.el.style.width = ''; }); eqParts.forEach(o => { o.w = o.el.getBoundingClientRect().width; }); }
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureEq); addEventListener('load', measureEq); addEventListener('resize', measureEq); measureEq();
 const phs = $$('.founder__ph, .pave__ph, .hero__frame'), people = $('.people'), plus = $('.plus span');
-new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { people.classList.add('is-in'); o.disconnect(); } }, { rootMargin: '0px 0px -18% 0px' }).observe(people);
+if (people) new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { people.classList.add('is-in'); o.disconnect(); } }, { rootMargin: '0px 0px -18% 0px' }).observe(people);
 const chips = $$('.chips li'), pars = $$('[data-par]').map(el => ({ el, f: +el.dataset.par, v: 0 })), colCards = $$('.rcard[data-col]');
 let lastY = scrollY, t0 = performance.now(), lastNow = t0;
 
-frameFn = function frame(now) {
+function frame(now) {
   const y = scrollY, dy = y - lastY; lastY = y;
   nav.classList.toggle('is-solid', y > 40);
   if (!nav.classList.contains('is-open')) { if (dy > 4 && y > VH * .5) nav.classList.add('is-hidden'); else if (dy < -4 || y < 40) nav.classList.remove('is-hidden'); }
@@ -284,7 +265,7 @@ frameFn = function frame(now) {
       gl.drawArrays(gl.POINTS, 0, N);
     }
   }
-  if (running) rafId = requestAnimationFrame(frame);
+  requestAnimationFrame(frame);
 }
 
 /* ---------- quote calculator + form ---------- */
@@ -301,6 +282,7 @@ const K = { height: [1, 1.2, 1.45], dirt: [1, 1.3], freq: [1, .95, .9, .85], min
 const L = { h: ['do 6 m', '6–12 m', '12–18 m', 'nad 18 m, s plošinou'], dirt: ['běžné', 'silné'], freq: ['jednorázově', '2× ročně', 'čtvrtletně', 'měsíčně'] };
 const form = $('#form'), fmsg = $('.form__msg'), quote = $('#quote'), sum = $('.sum'), areaIn = $('#area');
 const steps = $$('.qs'), stepLis = $$('.quote__steps li:not(.quote__prog)'), qBack = $('#qBack'), qNext = $('#qNext'), qSend = $('#qSend');
+if (!form || !quote || !areaIn || !qNext || !qSend) { console.warn('KAPE: form markup missing'); return; }
 let step = 0, shown = [0, 0], calc = {};
 const nice = a => a < 100 ? Math.round(a / 5) * 5 : a < 1000 ? Math.round(a / 10) * 10 : Math.round(a / 50) * 50;
 const areaOf = v => nice(10 * Math.pow(300, v / 100));
@@ -367,7 +349,7 @@ form.addEventListener('submit', e => { e.preventDefault();
       msg: String(d.get('msg') || ''),
       need: body,
       quote: calc,
-      company: ''
+      company: String(d.get('company') || '')
     })
   }).then(r => r.json().then(p => ({ ok: r.ok && p.ok, mocked: p.mocked, error: p.error })).catch(() => ({ ok: false })))
     .then(p => {
@@ -383,5 +365,5 @@ $('#qAgain').addEventListener('click', () => { $('.quote__steps').hidden = $('.q
 go(0); recalc();
 
 addEventListener('resize', () => { VH = innerHeight; VW = innerWidth; if (glOK) sizeGL(); });
-
-}
+if (typeof frame === 'function') requestAnimationFrame(frame);
+})();
