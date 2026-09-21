@@ -194,7 +194,13 @@ function sizeGL() { const d = Math.min(devicePixelRatio || 1, MOB.matches ? 1.25
 glOK = cv ? initGL() : false; if (glOK) sizeGL(); else if (cv) cv.style.display = 'none';
 
 /* scroll → shape: anchors are section centres; shapes hold while a chapter is being read */
-const anchors = [{ el: $('.hero'), s: 0 }, ...$$('.chap').map(el => ({ el, s: +el.dataset.shape })), { el: $('#proc'), s: 4 }];
+const techLead = $('.tech__lead');
+const anchors = [
+  { el: $('.hero'), s: 0 },
+  ...(techLead ? [{ el: techLead, s: 0 }] : []),
+  ...$$('.chap').map(el => ({ el, s: +el.dataset.shape })),
+  { el: $('#proc'), s: 4 }
+];
 const OFF = { d: [[1.45, 0], [-1.45, .4], [1.45, .42], [-1.3, .5], [0, 0]], m: [[.5, 1.25], [0, .95], [0, .95], [0, .9], [0, -.2]] };
 let shape = 0, shapeT = 0, offX = 1.45, offY = 0, alpha = 1, sc = 1;
 const tech = $('.tech'), contact = $('.contact'), rail = $('.rail'), railLinks = $$('.rail a');
@@ -247,7 +253,7 @@ function frame(now) {
     shape = RM ? shapeT : lerp(shape, shapeT, dtk);
     const O = MOB.matches ? OFF.m : OFF.d, i0 = Math.floor(clamp(shape, 0, 3.999)), f = shape - i0, e = f * f * (3 - 2 * f);
     offX = lerp(O[i0][0], O[i0 + 1][0], e); offY = lerp(O[i0][1], O[i0 + 1][1], e);
-    alpha = lerp(alpha, aT, .08); const SCS = [1, .8, .8, .8, 1]; sc = (MOB.matches ? .58 : clamp(VW / 1500, .78, 1.05)) * (MOB.matches ? 1 : lerp(SCS[i0], SCS[i0 + 1], e));
+    alpha = lerp(alpha, aT, .08); const SCS = [1, .8, .8, .8, 1]; sc = (MOB.matches ? .72 : clamp(VW / 1500, .78, 1.05)) * (MOB.matches ? 1 : lerp(SCS[i0], SCS[i0 + 1], e));
     mS[0] = lerp(mS[0], mouse[0], .04); mS[1] = lerp(mS[1], mouse[1], .04);
     if (document.visibilityState === 'visible') {
       const hotK = clamp(1 - Math.abs(shape - 3)); const c1 = theme.p1.map((v, i) => lerp(v, theme.p3[i], hotK * .8));
